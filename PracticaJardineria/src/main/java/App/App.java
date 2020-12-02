@@ -35,15 +35,14 @@ class App {
 	idClientePedidoException, dniException, nieException{
     	
     	Scanner kb = new Scanner(System.in);
-    	ClienteDaoBuilder cdb = new ClienteDaoBuilder(clientes);
     	System.out.println("CREAR CLIENTES");
-    	Cliente c1 = cdb.build(1, "Jorge", "Martinez", "68616676",null, null, "jmaritnez@gmail.com", null, "73017762N", tipoDocumento.DNI);
+    	Cliente c1 = ClienteDaoBuilder.build(1, "Jorge", "Martinez", "68616676",null, null, "jmaritnez@gmail.com", null, "73017762N", tipoDocumento.DNI);
     	clienteDao.guardar(c1);
-    	Cliente c3 = cdb.build(0, "Jorge", "Martinez", "695897825",null, null, "jmaritnez@gmail.com", null, "73017652N", tipoDocumento.DNI);
+    	Cliente c3 = ClienteDaoBuilder.build(0, "Jorge", "Martinez", "695897825",null, null, "jmaritnez@gmail.com", null, "73017652N", tipoDocumento.DNI);
     	clienteDao.guardar(c3);
-    	Cliente c2 = cdb.build(2, "Jorge", "Martinez", null, null, null, "jmaritnez@gmail.com", null, "A7894561B", tipoDocumento.NIE);
+    	Cliente c2 = ClienteDaoBuilder.build(2, "Jorge", "Martinez", null, null, null, "jmaritnez@gmail.com", null, "A7894561B", tipoDocumento.NIE);
     	clienteDao.guardar(c2);
-    	Cliente c4 = cdb.build(3, "Alejandro", "Perez", null, null, null, "aperez@gmail.com", null, "B8745632W", tipoDocumento.NIE);    
+    	Cliente c4 = ClienteDaoBuilder.build(3, "Alejandro", "Perez", null, null, null, "aperez@gmail.com", null, "B8745632W", tipoDocumento.NIE);    
     	clienteDao.guardar(c4);
     	
     	
@@ -56,7 +55,7 @@ class App {
     	PedidoDaoBuilder pdb = new PedidoDaoBuilder(pedidos, clientes);
     	System.out.println("**  AÑADIR PEDIDOS **");
     	//fechaPedido,fechaEntrega, fechaEsperada
-    	Pedido p1=pdb.build(1, new Date(120,11,01), new Date(120,11,05), 2, new Date(120,11,2));
+    	Pedido p1=pdb.build(1, new Date(120,11,02), new Date(120,11,05), 1, new Date(120,11,2));
     	pedidoDao.guardar(p1);
     	
     	for (Pedido p	: pedidos) {

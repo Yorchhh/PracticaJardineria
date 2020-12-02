@@ -16,19 +16,20 @@ import Model.Cliente;
 import Model.tipoDocumento;
 
 public class ClienteDaoBuilder {
-	List<Cliente> clientes;
+	static List<Cliente> clientes;
 	public ClienteDaoBuilder(List<Cliente> clientes){
-		this.clientes=clientes;
+		ClienteDaoBuilder.clientes=clientes;
 	}
 
-	public Cliente build(Integer id, String nombreCliente, String apellidoCliente, String telefono,
+	public  static Cliente build(Integer id, String nombreCliente, String apellidoCliente, String telefono,
 			String ciudad, String codigoPostal, String email, String contraseña, String documento,
 			tipoDocumento tipoDocumento)
 			throws IdException, DuplicityException, SurnamePhoneException, EmailException, dniException, nieException {
 			
+		ClienteDao clientedao = new ClienteDao(clientes);
 		comprobarIdPositivo(id);
-		comprobarDuplicidadId(clientes, id);
-		comprobarSurnamePhone(clientes, nombreCliente, apellidoCliente, telefono);
+		//comprobarDuplicidadId(id,clientedao );
+		//comprobarSurnamePhone(clientes, nombreCliente, apellidoCliente, telefono);
 		comprobarEmail(email);
 		comprobarDNI(tipoDocumento, documento);
 		comprobarNIE(tipoDocumento, documento);
@@ -54,8 +55,8 @@ public class ClienteDaoBuilder {
 			}
 		}
 	
-	public static void comprobarDuplicidadId(List<Cliente> clientes, Integer id) throws DuplicityException {
-		for (Cliente c : clientes) {// Recorremos nuestra lista de la bbdd
+	public static void comprobarDuplicidadId(Integer id,ClienteDao cdao) throws DuplicityException {
+		for (Cliente c : cdao.listar()) {// Recorremos nuestra lista de la bbdd
 			if (c.getId() == id) {// Si el id de uno de los clientes es igual al que nos entan introduciendo
 									// (duplicidad)
 				throw new DuplicityException();

@@ -17,23 +17,23 @@ public class PedidoDaoBuilder {
 	static List<Cliente> clientes;
 	public PedidoDaoBuilder(List<Pedido> pedidos, List<Cliente>	clientes) {
 		super();
-		this.pedidos = pedidos;
-		this.clientes=clientes;
+		PedidoDaoBuilder.pedidos = pedidos;
+		PedidoDaoBuilder.clientes=clientes;
 	}
 	
 	
 	public static Pedido build(Integer codigoPedido, Date fechaPedido,
 			Date fechaEntrega, Integer id, Date fechaEsperada) throws fechaException, fechaEsperadaException, codigoPedidoException,
 	codigoPedidoDuplicityException, idClientePedidoException {
-		Date fechaHoy=new Date(120, 11, 1);
+		Date fechaHoy=new Date(120, 11, 2);
 		Calendar calendario = Calendar.getInstance();
 		
 		
 		comprobarFecha(fechaHoy, fechaPedido);
 		comprobarFechaEsperada(calendario, fechaEsperada);
 		comprobarCodigoPedido(pedidos, codigoPedido);
-		comprobarDuplicidadcodigoPedido(pedidos, codigoPedido);
-		comprobarClienteIdPedido(id, clientes);
+//		comprobarDuplicidadcodigoPedido(pedidos, codigoPedido);
+//		comprobarClienteIdPedido(id, clientes);
 	
 		return new Pedido(codigoPedido,fechaPedido,fechaEntrega,id,fechaEsperada);
 		
@@ -67,7 +67,8 @@ public class PedidoDaoBuilder {
 		}
 	}
 	
-	public static void comprobarDuplicidadcodigoPedido(List<Pedido> pedidos, Integer codigoPedido) throws codigoPedidoDuplicityException {
+	public static void comprobarDuplicidadcodigoPedido(List<Pedido> pedidos, Integer codigoPedido) 
+			throws codigoPedidoDuplicityException {
 		for (Pedido p : pedidos) {
 			if(p.getCodigoPedido()==codigoPedido) {
 				throw new codigoPedidoDuplicityException();
@@ -75,11 +76,17 @@ public class PedidoDaoBuilder {
 		}
 	}
 	
-	public static void comprobarClienteIdPedido(Integer id,List<Cliente> clientes) throws idClientePedidoException {
+	public static void comprobarClienteIdPedido(Integer id,List<Cliente> clientes) 
+			throws idClientePedidoException {
+		boolean encontrado=false;
 		for (Cliente c : clientes) {
 			if(c.getId()==id) {
-				throw new idClientePedidoException();
+				encontrado=true;
+				break;
+				}
 			}
+		if(!encontrado) {
+			throw new idClientePedidoException();
 			
 		}
 	}
