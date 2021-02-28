@@ -1,5 +1,7 @@
 package Builder;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -25,12 +27,13 @@ public class PedidoDaoBuilder {
 	public static Pedido build(Integer codigoPedido, Date fechaPedido,
 			Date fechaEntrega, Integer id, Date fechaEsperada) throws fechaException, fechaEsperadaException, codigoPedidoException,
 	codigoPedidoDuplicityException, idClientePedidoException {
-		Date fechaHoy=new Date(120, 11, 2);
-		Calendar calendario = Calendar.getInstance();
+
+		LocalDate ahora = LocalDate.now();
+		Date hoy = Date.from(ahora.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		
 		
-		comprobarFecha(fechaHoy, fechaPedido);
-		comprobarFechaEsperada(calendario, fechaEsperada);
+		comprobarFecha(hoy, fechaPedido);//check
+//		comprobarFechaEsperada(hoy, fechaEsperada);
 		comprobarCodigoPedido(pedidos, codigoPedido);
 //		comprobarDuplicidadcodigoPedido(pedidos, codigoPedido);
 //		comprobarClienteIdPedido(id, clientes);
@@ -38,13 +41,13 @@ public class PedidoDaoBuilder {
 		return new Pedido(codigoPedido,fechaPedido,fechaEntrega,id,fechaEsperada);
 		
 	}
-	public static void comprobarFecha(Date calendario, Date fechaPedido) throws fechaException {
-		boolean igual= true;
-		if(calendario.equals(fechaPedido)) {
-			igual=false;
+	public static void comprobarFecha(Date fechaHoy, Date fechaPedido) throws fechaException {
+		boolean igual= false;
+		if(fechaHoy.equals(fechaPedido)) {
+			igual=true;
 			System.out.println("** La fecha corresponde al dia de hoy, CORRECTO **");
 		}else {
-			igual=true;
+			igual=false;
 			throw new fechaException();
 		}
 	}
@@ -54,7 +57,7 @@ public class PedidoDaoBuilder {
 	public static void comprobarFechaEsperada(Calendar calendario, Date fechaEsperada) 
 			throws fechaEsperadaException {
 		calendario.add(Calendar.DATE, +3);
-		if (fechaEsperada.after(calendario.getTime())) {
+		if (!fechaEsperada.after(calendario.getTime())) {
 			throw new fechaEsperadaException();
 		}else System.out.println("** La fecha de entrega esperada es de 3 dias o inferior **");
 	}

@@ -6,6 +6,17 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Builder.PedidoDaoBuilder;
+import Dao.PedidoDao;
+import Excepciones.codigoPedidoDuplicityException;
+import Excepciones.codigoPedidoException;
+import Excepciones.fechaEsperadaException;
+import Excepciones.fechaException;
+import Excepciones.idClientePedidoException;
+import Model.Cliente;
+import Model.Pedido;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -15,9 +26,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CrearPedido extends JFrame {
+	List<Cliente> clientes = new ArrayList<Cliente>();
+	List<Pedido> pedidos = new ArrayList<Pedido>();
+	PedidoDao pedidoDao = new PedidoDao(pedidos);
 
 	private JPanel contentPane;
 	private JTextField textoIdCliente;
@@ -79,9 +95,41 @@ public class CrearPedido extends JFrame {
 		contentPane.add(textoIdCliente);
 		textoIdCliente.setColumns(10);
 		
-		JButton cotonCrearPedido = new JButton("CREAR PEDIDO");
-		cotonCrearPedido.setBounds(274, 209, 131, 23);
-		contentPane.add(cotonCrearPedido);
+		final JSpinner fechaCreacion = new JSpinner();
+		fechaCreacion.setModel(new SpinnerDateModel(new Date(1606863600000L), null, null, Calendar.DAY_OF_YEAR));
+		fechaCreacion.setBounds(43, 137, 108, 20);
+		contentPane.add(fechaCreacion);
+		
+		final JSpinner fechaEntrega = new JSpinner();
+		fechaEntrega.setModel(new SpinnerDateModel(new Date(1606863600000L), null, null, Calendar.DAY_OF_YEAR));
+		fechaEntrega.setBounds(43, 210, 102, 20);
+		contentPane.add(fechaEntrega);
+		
+		textField = new JTextField();
+		textField.setBounds(43, 66, 86, 20);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		final JSpinner fechaEsperada = new JSpinner();
+		fechaEsperada.setModel(new SpinnerDateModel(new Date(1606863600000L), null, null, Calendar.DAY_OF_YEAR));
+		fechaEsperada.setBounds(274, 66, 108, 20);
+		contentPane.add(fechaEsperada);
+		
+		JButton botonCrearPedido = new JButton("CREAR PEDIDO");
+		botonCrearPedido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Pedido p1 = PedidoDaoBuilder.build(Integer.parseInt(textoIdCliente.getText()), (Date)fechaCreacion.getValue(),
+							(Date)fechaEntrega.getValue(),Integer.parseInt(textField.getText()), (Date)fechaEsperada.getValue());
+				} catch (NumberFormatException | fechaException | fechaEsperadaException | codigoPedidoException
+						| codigoPedidoDuplicityException | idClientePedidoException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		botonCrearPedido.setBounds(274, 209, 131, 23);
+		contentPane.add(botonCrearPedido);
 		
 		JButton btnNewButton = new JButton("Volver");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -93,24 +141,6 @@ public class CrearPedido extends JFrame {
 		btnNewButton.setBounds(165, 209, 89, 23);
 		contentPane.add(btnNewButton);
 		
-		JSpinner spinner_6 = new JSpinner();
-		spinner_6.setModel(new SpinnerDateModel(new Date(1606863600000L), null, null, Calendar.DAY_OF_YEAR));
-		spinner_6.setBounds(43, 137, 108, 20);
-		contentPane.add(spinner_6);
-		
-		JSpinner spinner_9 = new JSpinner();
-		spinner_9.setModel(new SpinnerDateModel(new Date(1606863600000L), null, null, Calendar.DAY_OF_YEAR));
-		spinner_9.setBounds(43, 210, 102, 20);
-		contentPane.add(spinner_9);
-		
-		textField = new JTextField();
-		textField.setBounds(43, 66, 86, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
-		JSpinner spinner = new JSpinner();
-		spinner.setModel(new SpinnerDateModel(new Date(1606863600000L), null, null, Calendar.DAY_OF_YEAR));
-		spinner.setBounds(274, 66, 108, 20);
-		contentPane.add(spinner);
+	
 	}
 }

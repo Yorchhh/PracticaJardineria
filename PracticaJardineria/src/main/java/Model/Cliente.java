@@ -2,7 +2,7 @@ package Model;
 
 public class Cliente {
 
-	public Integer id;
+	public int id;
 	private String nombreCliente;
 	private String apellidoCliente;
 	private String telefono;
@@ -13,7 +13,7 @@ public class Cliente {
 	private String documento;
 	private tipoDocumento tipoDocumento;
 
-	public Cliente(Integer id, String nombreCliente, String apellidoCliente, String telefono, String ciudad,
+	public Cliente(int id, String nombreCliente, String apellidoCliente, String telefono, String ciudad,
 			String codigoPostal, String email, String contraseña, String documento, tipoDocumento tipoDocumento) {
 		super();
 		this.id = id;
@@ -33,11 +33,11 @@ public class Cliente {
 
 	}
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

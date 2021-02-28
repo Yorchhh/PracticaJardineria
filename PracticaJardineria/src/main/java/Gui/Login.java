@@ -38,7 +38,7 @@ import java.sql.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JCheckBox;
 
-public class Login extends JFrame {
+public class Login extends JFrame implements ActionListener{
 	static List<Cliente> clientes = new ArrayList<Cliente>();
 	static ClienteDao clienteDao = new ClienteDao(clientes);
 	static List<Pedido> pedidos = new ArrayList<Pedido>();
@@ -55,14 +55,16 @@ public class Login extends JFrame {
 	 * @throws fechaEsperadaException 
 	 * @throws fechaException 
 	 */
-	public static void main(String[] args) throws fechaException, fechaEsperadaException, codigoPedidoException, idClientePedidoException {
+	public static void main(final String[] args) throws fechaException, fechaEsperadaException, codigoPedidoException, idClientePedidoException {
+		
+		new Login(args);
 		Cliente c1,c2;
 		
 		try {
 			
 			c1 = ClienteDaoBuilder.build(1, "Jorge", "Martinez", "68616676",null, null, "jmaritnez@gmail.com", "jmartinez", "73017762N", tipoDocumento.DNI);
 			clienteDao.guardar(c1);
-			c2=ClienteDaoBuilder.build(2, "Alfonso", "Perez", "652478965", "Pedrola", "140001", "aperez@gmail.com", "apez", "F2578942N", tipoDocumento.NIE);
+			c2=ClienteDaoBuilder.build(2, "Alfonso", "Perez", "652478965", "Pedrola", "140001", "aperez@gmail.com", "apez", "73017652N", tipoDocumento.NIE);
 			clienteDao.guardar(c2);
 		} catch (IdException e1) {
 			// TODO Auto-generated catch block
@@ -99,7 +101,7 @@ public class Login extends JFrame {
 			public void run() {
 				try {
 					
-					Login frame = new Login();
+					Login frame = new Login(args);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -111,7 +113,7 @@ public class Login extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Login() {
+	public Login(final String[] args) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -135,10 +137,11 @@ public class Login extends JFrame {
 					if(cliente.getNombreCliente().equals(textoUsuario.getText()) && cliente.getContraseña().equals(textContraseña.getText())) {
 						esValido=true;
 						dispose();//Se cierra la ventana al introducir datos
-						Opciones.main(null);
+						Opciones.main(args);;
 					}
-					if(esValido==false){
-						
+					if(!esValido){
+						textoUsuario=null;
+						textContraseña=null;		
 						
 					}
 				}
@@ -156,13 +159,29 @@ public class Login extends JFrame {
 		textContraseña.setBounds(141, 136, 99, 23);
 		contentPane.add(textContraseña);
 		
-		JCheckBox verContraseña = new JCheckBox("Ver");
+		final JCheckBox verContraseña = new JCheckBox("Ver");
 		verContraseña.setBounds(50, 161, 99, 49);
 		contentPane.add(verContraseña);
+		verContraseña.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(verContraseña.isSelected()) {
+					textContraseña.setEchoChar((char) 0);
+				}else {
+					textContraseña.setEchoChar('*');
+				}
+			}
+		});
 	}
 	private static class __Tmp {
 		private static void __tmp() {
 			  javax.swing.JPanel __wbp_panel = new javax.swing.JPanel();
 		}
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

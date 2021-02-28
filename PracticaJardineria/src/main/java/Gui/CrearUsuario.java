@@ -20,10 +20,15 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
+import javax.swing.ButtonGroup;
 
 public class CrearUsuario extends JFrame {
+	List<Cliente> clientes = new ArrayList<Cliente>();
+	ClienteDao clienteDao= new ClienteDao(clientes);
 
 	private JPanel contentPane;
 	private JTextField textoId;
@@ -35,6 +40,7 @@ public class CrearUsuario extends JFrame {
 	private JTextField textoEmail;
 	private JTextField textoContraseña;
 	private JTextField textoDocumento;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	/**
 	 * Launch the application.
@@ -99,27 +105,20 @@ public class CrearUsuario extends JFrame {
 		lblNewLabel_8.setBounds(210, 208, 82, 14);
 		contentPane.add(lblNewLabel_8);
 		
-		final JRadioButton rdbtnNewRadioButton = new JRadioButton("DNI");
-		rdbtnNewRadioButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		rdbtnNewRadioButton.setBounds(138, 13, 46, 23);
-		contentPane.add(rdbtnNewRadioButton);
+		final JRadioButton dniRadioBtn = new JRadioButton("DNI");
+		buttonGroup.add(dniRadioBtn);
+		dniRadioBtn.setSelected(true);
+		dniRadioBtn.setBounds(138, 13, 46, 23);
+		contentPane.add(dniRadioBtn);
 		
-		final JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("NIE");
-		rdbtnNewRadioButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-				
-			}
-
-		});
-		rdbtnNewRadioButton_1.setBounds(210, 13, 46, 23);
-		contentPane.add(rdbtnNewRadioButton_1);
+		final JRadioButton nieRadioBtn = new JRadioButton("NIE");
+		buttonGroup.add(nieRadioBtn);
+		
+		nieRadioBtn.setBounds(186, 13, 46, 23);
+		contentPane.add(nieRadioBtn);
 		
 		JLabel lblNewLabel_9 = new JLabel("Documento");
-		lblNewLabel_9.setBounds(262, 17, 79, 14);
+		lblNewLabel_9.setBounds(233, 17, 79, 14);
 		contentPane.add(lblNewLabel_9);
 		
 		textoId = new JTextField();
@@ -178,11 +177,12 @@ public class CrearUsuario extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					if(rdbtnNewRadioButton.isEnabled()) {
-					}
+					tipoDocumento t= dniRadioBtn.isSelected()?tipoDocumento.DNI: tipoDocumento.NIE;
 					
-//					Cliente c1= ClienteDaoBuilder.build(textoId.getText(), textoNombre.getText(), textoApellidos.getText(), textoTlf.getText(), textoCiudad.getText(), textoCodigoPostal.getText(), textoEmail.getText(), textoDocumento.getText(), textoDocumento.getText(), rdbtnNewRadioButton.getAction());
-//					clientedao.guardar(c1);
+					Cliente c1= ClienteDaoBuilder.build(Integer.parseInt(textoId.getText()), textoNombre.getText(), 
+							textoApellidos.getText(), textoTlf.getText(), textoCiudad.getText(), textoCodigoPostal.getText(),
+							textoEmail.getText(), textoDocumento.getText(), textoDocumento.getText(), t);
+					clienteDao.guardar(c1);
 					
 					//Fallo al guardar la variable Id, Integer en un string.
 						
@@ -197,7 +197,7 @@ public class CrearUsuario extends JFrame {
 		contentPane.add(btnNewButton);
 		
 		textoDocumento = new JTextField();
-		textoDocumento.setBounds(325, 14, 86, 20);
+		textoDocumento.setBounds(289, 14, 86, 20);
 		contentPane.add(textoDocumento);
 		textoDocumento.setColumns(10);
 		
